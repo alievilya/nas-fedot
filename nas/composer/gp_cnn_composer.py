@@ -8,13 +8,13 @@ from typing import (
 )
 
 from fedot.core.composer.composer import Composer
-from core.composer.gp_composer.gp_composer import GPComposerRequirements
-from core.composer.optimisers.gp_optimiser import GPChainOptimiser, GPChainOptimiserParameters
-from core.composer.optimisers.selection import SelectionTypesEnum
-from core.composer.visualisation import ComposerVisualiser
-from core.composer.write_history import write_composer_history_to_csv
-from core.models.data import InputData
-from core.models.data import train_test_data_setup
+from fedot.core.composer.gp_composer.gp_composer import GPComposerRequirements
+from fedot.core.composer.optimisers.gp_optimiser import GPChainOptimiser, GPChainOptimiserParameters
+from fedot.core.composer.optimisers.selection import SelectionTypesEnum
+from fedot.core.composer.visualisation import ComposerVisualiser
+from fedot.core.composer.write_history import write_composer_history_to_csv
+from fedot.core.models.data import InputData
+from fedot.core.models.data import train_test_data_setup
 from nas.cnn_crossover import CrossoverTypesEnum
 from nas.cnn_crossover import crossover_by_type
 from nas.cnn_gp_operators import permissible_kernel_parameters_correct, random_cnn_chain
@@ -34,7 +34,7 @@ class GPNNComposerRequirements(GPComposerRequirements):
     min_num_of_neurons: int = 50
     max_num_of_neurons: int = 200
     min_filters = 64
-    max_filters = 128
+    max_filters = 256
     channels_num = 3
     max_drop_size: int = 0.5
     image_size: List[int] = None
@@ -43,9 +43,9 @@ class GPNNComposerRequirements(GPComposerRequirements):
     pool_types: List[LayerTypesIdsEnum] = None
     train_epochs_num: int = 10
     batch_size: int = 24
-    num_of_classes = 2
+    num_of_classes = 120
     activation_types = activation_types
-    max_num_of_conv_layers = 4
+    max_num_of_conv_layers = 7
     min_num_of_conv_layers = 3
 
     def __post_init__(self):

@@ -1,8 +1,8 @@
 from enum import Enum
 from typing import Callable
 
-from core.composer.metrics import RmseMetric, StructuralComplexityMetric, MaeMetric, RocAucMetric, LogLossMetric, \
-    AccuracyScore
+from fedot.core.composer.metrics import RmseMetric, StructuralComplexityMetric, MaeMetric, RocAucMetric, LogLossMetric, \
+    AccuracyScore, LogLossMulticlassMetric
 
 
 class MetricsEnum(Enum):
@@ -22,6 +22,7 @@ class ClassificationMetricsEnum(QualityMetricsEnum):
     ROCAUC = 'roc_auc'
     precision = 'precision'
     log_loss = 'log_loss'
+    log_loss_multiclass = 'log_loss_multiclass'
     accuracy = 'accuracy'
 
 
@@ -34,6 +35,7 @@ class MetricsRepository:
     __metrics_implementations = {
         ClassificationMetricsEnum.ROCAUC: RocAucMetric.get_value,
         ClassificationMetricsEnum.log_loss: LogLossMetric.get_value,
+        ClassificationMetricsEnum.log_loss_multiclass: LogLossMulticlassMetric.get_value,
         ClassificationMetricsEnum.accuracy: AccuracyScore.get_value,
         RegressionMetricsEnum.MAE: MaeMetric.get_value,
         RegressionMetricsEnum.RMSE: RmseMetric.get_value,
