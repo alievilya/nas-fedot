@@ -57,7 +57,7 @@ def from_images(file_path, task_type: TaskTypesEnum = MachineLearningTasksEnum.c
     Xtrain = []
     Ytrain = []
     # Y_one_hot = np.zeros(shape=[len(files), ohe_hot_categories.shape[0]])
-    dftrain = pd.read_csv('dogs/labels.csv', sep=",")
+    dftrain = pd.read_csv('dataset/labels.csv', sep=",")
     dogs_values = {}
     for x in dftrain.values:
         dogs_values[x[0]] = x[1]

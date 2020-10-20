@@ -116,6 +116,6 @@ if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
     # tf.config.experimental.set_memory_growth
     # file_path = 'iceberg_data/train.json'
-    dogs_path = 'dogs/train/'
+    dogs_path = 'dataset/train/'
 
     run_dogs_classification_problem(file_path=dogs_path)
