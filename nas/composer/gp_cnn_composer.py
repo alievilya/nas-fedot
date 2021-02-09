@@ -34,7 +34,7 @@ class GPNNComposerRequirements(GPComposerRequirements):
     min_num_of_neurons: int = 50
     max_num_of_neurons: int = 200
     min_filters = 64
-    max_filters = 256
+    max_filters = 128
     channels_num = 3
     max_drop_size: int = 0.5
     image_size: List[int] = None
@@ -43,9 +43,9 @@ class GPNNComposerRequirements(GPComposerRequirements):
     pool_types: List[LayerTypesIdsEnum] = None
     train_epochs_num: int = 10
     batch_size: int = 24
-    num_of_classes = 120
+    num_of_classes = 3
     activation_types = activation_types
-    max_num_of_conv_layers = 7
+    max_num_of_conv_layers = 5
     min_num_of_conv_layers = 3
 
     def __post_init__(self):

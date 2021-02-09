@@ -19,7 +19,7 @@ def keras_model_fit(model, input_data: InputData, verbose: bool = True, batch_si
               batch_size=batch_size,
               epochs=epochs,
               verbose=verbose,
-              validation_split=0.25,
+              validation_split=0.2,
               callbacks=[earlyStopping, reduce_lr_loss, mcp_save])
     return keras_model_predict(model, input_data)
 
@@ -54,7 +54,7 @@ def generate_structure(node: Any):
         return [node]
 
 
-def create_nn_model(chain: Any, input_shape: tuple, classes: int = 120):
+def create_nn_model(chain: Any, input_shape: tuple, classes: int = 3):
     nn_structure = chain.cnn_nodes + generate_structure(chain.root_node)
     model = models.Sequential()
     for i, layer in enumerate(nn_structure):
@@ -73,6 +73,8 @@ def create_nn_model(chain: Any, input_shape: tuple, classes: int = 120):
                     model.add(
                         layers.Conv2D(filters_num, kernel_size=kernel_size, activation=activation,
                                       strides=conv_strides))
+                    # model.add(layers.Conv2D(filters_num, kernel_size=kernel_size, activation=activation,
+                    #                   strides=conv_strides, data_format='channels_first'))
             if layer.layer_params.pool_size:
                 pool_size = layer.layer_params.pool_size
                 pool_strides = layer.layer_params.pool_strides
@@ -94,6 +96,6 @@ def create_nn_model(chain: Any, input_shape: tuple, classes: int = 120):
     # Output
     output_shape = 1 if classes == 2 else classes
     model.add(layers.Dense(output_shape, activation="softmax"))
-    model.compile(loss='sparse_categorical_crossentropy', optimizer=optimizers.RMSprop(lr=1e-4), metrics=['acc'])
+    model.compile(loss='categorical_crossentropy', optimizer=optimizers.RMSprop(lr=1e-4), metrics=['acc'])
     model.summary()
     return model

@@ -10,9 +10,9 @@ import os
 from sklearn.preprocessing import LabelEncoder
 from keras.utils import np_utils
 
-from nas.breeds import BreedsEnum
 
-def from_json(file_path, task_type: TaskTypesEnum = MachineLearningTasksEnum.classification, train_size=0.75):
+
+def from_json(file_path, task_type: TaskTypesEnum = MachineLearningTasksEnum.classification):
     df_train = pd.read_json(file_path)
     Xtrain = get_scaled_imgs(df_train)
     Ytrain = np.array(df_train['is_iceberg'])
@@ -29,61 +29,6 @@ def from_json(file_path, task_type: TaskTypesEnum = MachineLearningTasksEnum.cla
                                 task_type=task_type)
     return train_input_data, test_input_data
 
-def encode_labels(breed_types=BreedsEnum.breed_types, is_one_hot=False):
-    breed_df = pd.DataFrame(breed_types, columns=['Breed_Types'])
-    labelencoder = LabelEncoder()
-    breed_df['Breed_Types_Cat'] = labelencoder.fit_transform(breed_df['Breed_Types'])
-    if is_one_hot:
-        encoder_to_one_hot = LabelEncoder()
-        encoder_to_one_hot.fit(breed_types)
-        encoded_Y = encoder_to_one_hot.transform(breed_types)
-        # convert integers to dummy variables (i.e. one hot encoded)
-        ohe_hot_breeds = np_utils.to_categorical(encoded_Y)
-        return ohe_hot_breeds
-
-    breed_dict = {}
-    for i in breed_df.values:
-        breed_dict[i[0]]=i[1]
-
-    return breed_dict
-
-
-def from_images(file_path, task_type: TaskTypesEnum = MachineLearningTasksEnum.classification, train_size=0.75):
-    possible_breeds = BreedsEnum.breed_types
-    encoded_categories = encode_labels(possible_breeds, is_one_hot=False)
-    size = 100
-    files = [f for f in os.listdir(file_path) if isfile(join(file_path, f))]
-    files.sort()
-    Xtrain = []
-    Ytrain = []
-    # Y_one_hot = np.zeros(shape=[len(files), ohe_hot_categories.shape[0]])
-    dftrain = pd.read_csv('dataset/labels.csv', sep=",")
-    dogs_values = {}
-    for x in dftrain.values:
-        dogs_values[x[0]] = x[1]
-    for i in range(len(files)):
-        filename = file_path + files[i]
-        img_rgb = cv2.imread(filename)
-        img_rgb = cv2.resize(img_rgb, (size, size))
-        label_ind = files[i][:-4]
-        name_dog = dogs_values[label_ind]
-        if name_dog in possible_breeds:
-            Xtrain.append(img_rgb)
-            encoded_vals = encoded_categories[name_dog]
-            Ytrain.append(encoded_vals)
-        else:
-            continue
-    Xtrain = np.array(Xtrain)
-    Xtrain, Xtest, Ytrain, Ytest = train_test_split(Xtrain, Ytrain, random_state=1, train_size=0.8)
-    Xtrain = np.array(Xtrain)
-    Xtest = np.array(Xtest)
-    train_input_data = InputData(idx=np.arange(0, len(Xtrain)), features=Xtrain, target=np.array(Ytrain),
-                                 task_type=task_type)
-
-    test_input_data = InputData(idx=np.arange(0, len(Xtest)), features=Xtest, target=np.array(Ytest),
-                                task_type=task_type)
-
-    return train_input_data, test_input_data
 
 def get_scaled_imgs(df):
     imgs = []

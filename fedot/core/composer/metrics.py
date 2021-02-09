@@ -100,6 +100,21 @@ class AccuracyScore(ChainMetric):
 
         return score
 
+class AccuracyMulticlassScore(ChainMetric):
+    @staticmethod
+    @from_maximised_metric
+    def get_value(chain: Chain, reference_data: InputData) -> float:
+        try:
+            # validate(chain)
+            results = chain.predict(reference_data)
+            y_pred = [round(predict) for predict in results.predict]
+            score = round(accuracy_score(y_true=reference_data.target,
+                                         y_pred=y_pred), 3)
+        except Exception as ex:
+            print(ex)
+            score = 0.5
+
+        return score
 
 # TODO: reference_data = None ?
 class StructuralComplexityMetric(ChainMetric):
